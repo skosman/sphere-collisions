@@ -12,6 +12,15 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
+# Add program target called sphere
+add_executable(test_sphere lib/sphere.cpp test_sphere.cpp)
+
+# Add include directories
+target_include_directories(test_sphere PUBLIC include)
+
+# Link random program to catch for testing
+target_link_libraries(test_sphere Catch2::Catch2)
+
 # Add program target called sphere_collision
 add_executable(sphere_collision app/sphere_collision.cpp)
 target_link_libraries(sphere_collision OpenGL::GL)
