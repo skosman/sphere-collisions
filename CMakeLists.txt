@@ -7,13 +7,16 @@ project(cpp_project LANGUAGES CXX)
 # Set C++ version
 set(CMAKE_CXX_STANDARD 20)
 
+# Get the catch2 package for unit testing
+find_package(Catch2 REQUIRED)
+
 # Get OpenGL, GLEW, and GLFW package
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
 # Add program target called sphere
-add_executable(test_sphere lib/sphere.cpp test_sphere.cpp)
+add_executable(test_sphere lib/sphere.cpp app/test_sphere.cpp)
 
 # Add include directories
 target_include_directories(test_sphere PUBLIC include)
