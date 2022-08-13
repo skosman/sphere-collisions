@@ -6,24 +6,34 @@
 class sphere {
   public:
     // Sphere constructor
-    sphere(float radius, float mass, std::vector<float> position, std::vector<float> velocity);
+    sphere(int id, float radius, float mass, std::vector<float> position, std::vector<float> velocity);
 
-    // Sphere destructor
-    ~sphere();
-
+    // Returns the id of the sphere
+    int get_id() const;
+    
     // Returns the radius of the sphere
     float get_radius() const;
+
     // Returns the mass of the sphere
     float get_mass() const;
 
     // Get the x, y, and z position coordinates of the sphere
     std::vector<float> get_position() const;
 
+    // Set the x, y, and z position coordinates of the sphere
+    void set_position(float x, float y, float z);
+
     // Returns the x, y, and z velocity coordinates of the sphere
     std::vector<float> get_velocity() const;
 
+    // Set the x, y, and z velocity coordinates of the sphere
+    void set_velocity(float x, float y, float z);
+
+    bool operator==(const sphere &s) const;
 
   private:
+    // Id of the sphere
+    int id_;
     // Radius of the sphere
     float radius_;
     // Mass of the sphere
