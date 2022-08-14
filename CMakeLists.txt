@@ -10,10 +10,9 @@ set(CMAKE_CXX_STANDARD 20)
 # Get the catch2 package for unit testing
 find_package(Catch2 REQUIRED)
 
-# Get OpenGL, GLEW, and GLFW package
+# Get OpenGL and GLUT package
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(glfw3 REQUIRED)
+find_package(GLUT REQUIRED)
 
 # Add program target called sphere
 add_executable(test_sphere lib/sphere.cpp app/test_sphere.cpp)
@@ -25,8 +24,12 @@ target_include_directories(test_sphere PUBLIC include)
 target_link_libraries(test_sphere Catch2::Catch2)
 
 # Add program target called sphere_collision
-add_executable(sphere_collision app/sphere_collision.cpp)
+add_executable(sphere_collision app/sphere_collision.cpp lib/sphere.cpp)
+
+# Add include directories
+target_include_directories(sphere_collision PUBLIC include)
 target_link_libraries(sphere_collision OpenGL::GL)
-target_link_libraries(sphere_collision GLEW::GLEW)
-target_link_libraries(sphere_collision glfw)
+
+include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+target_link_libraries(sphere_collision ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
 
