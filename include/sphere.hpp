@@ -20,6 +20,15 @@ class sphere {
     // Get the x, y, and z position coordinates of the sphere
     std::vector<float> get_position() const;
 
+    // Get the x position coordinate of the sphere
+    float get_x() const;
+
+    // Get the y position coordinate of the sphere
+    float get_y() const;
+
+    // Get the z position coordinate of the sphere
+    float get_z() const;
+
     // Set the x, y, and z position coordinates of the sphere
     void set_position(float x, float y, float z);
 

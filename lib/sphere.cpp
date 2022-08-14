@@ -30,6 +30,21 @@
     return position_;
   }
 
+  // Get x position coordinate of the sphere
+  float sphere::get_x() const {
+    return position_[0];
+  }
+
+  // Get y position coordinate of the sphere
+  float sphere::get_y() const {
+    return position_[1];
+  }
+
+  // Get z position coordinate of the sphere
+  float sphere::get_z() const {
+    return position_[2];
+  }
+
   // Set the x, y, and z position coordinates of the sphere
   void sphere::set_position(float x, float y, float z) {
     // position_
