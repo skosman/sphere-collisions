@@ -5,9 +5,22 @@
 #endif
 
 #include <iostream>
+#include <vector>
+#include <numbers> 
+#include <cmath>
+#include <sphere.hpp>
+
+// Vector for holding all the spheres
+std::vector<sphere> spheres;
 
 // Callback function that handles displaying the objects in the program
 void display_callback() {
+  // Clear the color and depth buffers
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // Use the model-view matrix
+  glMatrixMode(GL_MODELVIEW);
+  // Reset the model-view matrix
+  glLoadIdentity();
 
 }
 
@@ -26,6 +39,20 @@ void keyboard_callback(int key, int x, int y) {
     std::cout << "down" << '\n';
   }
   
+}
+
+// Intialize the spheres to be displayed in the program
+// TODO: Update to use a file to create spheres
+void init_spheres() {
+    // Initialize balls with random positions and colors
+   std::vector<float> position = {50, 50, 50};
+   std::vector<float> velocity = {1.2, -2, 1.7};
+   float radius = 7.0;
+   // Calculate the mass of the sphere using the volume where density is equal to 1
+   float mass = (4.0 / 3.0) * std::numbers::pi_v<float> * std::pow(radius, 3);
+
+   sphere s1(1, radius, mass, position, velocity);
+   spheres.push_back(s1);
 }
 
 // Main program that runs the sphere collision program
