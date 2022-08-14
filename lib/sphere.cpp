@@ -47,7 +47,8 @@
 
   // Set the x, y, and z position coordinates of the sphere
   void sphere::set_position(float x, float y, float z) {
-    // position_
+    std::vector<float> updated_position = {x, y, z};
+    position_ = updated_position;
   }
 
   // Returns the x, y, and z velocity coordinates of the sphere
@@ -57,7 +58,8 @@
 
   // Set the x, y, and z velocity coordinates of the sphere
   void sphere::set_velocity(float x, float y, float z) {
-    // return velocity_;
+    std::vector<float> updated_velocity = {x, y, z};
+    velocity_ = updated_velocity;
   }
 
     // Check if two spheres are equal based on their id
