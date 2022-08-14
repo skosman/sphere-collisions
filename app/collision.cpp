@@ -40,7 +40,7 @@ void sphere_collision(sphere s1, sphere s2) {
    // Calculate the dot product of sphere 2
   float x_2 = vec_x * s2.get_velocity()[0] + vec_y * s2.get_velocity()[1] + vec_z * s2.get_velocity()[2];
 
-   // Multiple the result of the dot product with sphere 1 velocity x
+   // Multiple the result of the dot product with sphere 2 velocity x
   float vec_2_x_0 = s2.get_velocity()[0] * x_2;
   float vec_2_x_1 = s2.get_velocity()[1] * x_2;
   float vec_2_x_2 = s2.get_velocity()[2] * x_2;
@@ -50,7 +50,7 @@ void sphere_collision(sphere s1, sphere s2) {
   float vec_2_y_1 = s2.get_velocity()[1] - vec_2_x_1;
   float vec_2_y_2 = s2.get_velocity()[2] - vec_2_x_2;
 
-  // Now calculate the final velocity
+  // Now calculate the final velocity for both spheres
   float mass_1_final = (s1.get_mass() - s2.get_mass()) / (s1.get_mass() + s2.get_mass());
   float mass_2_final = (2 * s2.get_mass()) / (s1.get_mass() + s2.get_mass());
 
@@ -68,7 +68,7 @@ void sphere_collision(sphere s1, sphere s2) {
   float vel_2_y = mass_1_final * vec_1_x_1 + mass_2_final * vec_2_x_1 + vec_2_y_1;
   float vel_2_z = mass_1_final * vec_1_x_2 + mass_2_final * vec_2_x_2 + vec_2_y_2;
 
-  // Update the velocity of the first sphere
+  // Update the velocity of the second sphere
   s2.set_velocity(vel_2_x, vel_2_y, vel_2_z);
 }
 
