@@ -4,6 +4,17 @@
 #include <GL/glut.h>
 #endif
 
+void display_callback() {
+
+}
+
+void keyboard_callback(unsigned char key, int x, int y) {
+
+}
+
+void timer_callback(int value) {
+
+}
 
 // Main program that runs the sphere collision program
 int main(int argc, char *argv[]) {
@@ -18,6 +29,12 @@ int main(int argc, char *argv[]) {
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
   // Create window with given title
   glutCreateWindow("Sphere Collision");
+
+  // Add callback functions to display and handle user input
+  glutDisplayFunc(display_callback);
+  glutTimerFunc(10, timer_callback, 0);
+  glutKeyboardFunc(keyboard_callback);
+  glutMainLoop();
 
 
   return 0;
