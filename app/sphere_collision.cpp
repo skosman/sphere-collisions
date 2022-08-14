@@ -4,15 +4,18 @@
 #include <GL/glut.h>
 #endif
 
+// Callback function that handles displaying the objects in the program
 void display_callback() {
 
 }
 
-void keyboard_callback(unsigned char key, int x, int y) {
+// Callback function that will be used to refresh the 
+void timer_callback(int value) {
 
 }
 
-void timer_callback(int value) {
+// Callback function that handles keyboard input
+void keyboard_callback(unsigned char key, int x, int y) {
 
 }
 
@@ -34,8 +37,8 @@ int main(int argc, char *argv[]) {
   glutDisplayFunc(display_callback);
   glutTimerFunc(10, timer_callback, 0);
   glutKeyboardFunc(keyboard_callback);
+  // Will continuously loop to render the program
   glutMainLoop();
-
-
+  
   return 0;
 }
