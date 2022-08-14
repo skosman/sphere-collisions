@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <iostream>
+
 // Callback function that handles displaying the objects in the program
 void display_callback() {
 
@@ -14,9 +16,16 @@ void timer_callback(int value) {
 
 }
 
-// Callback function that handles keyboard input
-void keyboard_callback(unsigned char key, int x, int y) {
+// Callback function that handles arrow keys input
+void keyboard_callback(int key, int x, int y) {
+  if (key == GLUT_KEY_UP) {
+    std::cout << "up" << '\n';
+  }
 
+  if (key == GLUT_KEY_DOWN) {
+    std::cout << "down" << '\n';
+  }
+  
 }
 
 // Main program that runs the sphere collision program
@@ -36,9 +45,9 @@ int main(int argc, char *argv[]) {
   // Add callback functions to display and handle user input
   glutDisplayFunc(display_callback);
   glutTimerFunc(10, timer_callback, 0);
-  glutKeyboardFunc(keyboard_callback);
+  glutSpecialFunc(keyboard_callback);
   // Will continuously loop to render the program
   glutMainLoop();
-  
+
   return 0;
 }
