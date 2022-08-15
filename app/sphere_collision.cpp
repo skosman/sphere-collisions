@@ -9,6 +9,7 @@
 #include <numbers> 
 #include <cmath>
 #include <sphere.hpp>
+// #include "collision.hpp"
 
 
 // Vector for holding all the spheres
@@ -31,51 +32,156 @@ void display_callback() {
   glutSwapBuffers();
 }
 
+// Handles collision between two spheres
+// Precondition: The two given spheres are not the same sphere
+void sphere_collision(int i, int j) {
+  sphere &s1 = spheres.at(i);
+  sphere &s2 = spheres.at(j);
+
+  float vec_x = s1.get_x() - s2.get_x();
+  float vec_y = s1.get_y() - s2.get_y();
+  float vec_z = s1.get_z() - s2.get_z();
+
+  // Normalize vector
+  float dist = std::sqrt((vec_x * vec_x) + (vec_y * vec_y) + (vec_z * vec_z));
+  vec_x /= dist;
+  vec_y /= dist;
+  vec_z /= dist;
+
+  // Calculate the dot product of sphere 2
+  float x_1 = vec_x * s1.get_vx() + vec_y * s1.get_vy() + vec_z * s1.get_vz();
+
+  // Multiple the result of the dot product with sphere 1 velocity x
+  float vec_1_x_0 = s1.get_vx() * x_1;
+  float vec_1_x_1 = s1.get_vy() * x_1;
+  float vec_1_x_2 = s1.get_vz() * x_1;
+
+  // Subtract 
+  float vec_1_y_0 = s1.get_vx() - vec_1_x_0;
+  float vec_1_y_1 = s1.get_vy() - vec_1_x_1;
+  float vec_1_y_2 = s1.get_vz() - vec_1_x_2;
+
+  // Repeat the above with the sphere 2
+  vec_x *= -1;
+  vec_y *= -1;
+  vec_z *= -1;
+
+   // Calculate the dot product of sphere 2
+  float x_2 = vec_x * s2.get_vx() + vec_y * s2.get_vy() + vec_z * s2.get_vz();
+
+   // Multiple the result of the dot product with sphere 2 velocity x
+  float vec_2_x_0 = s2.get_vx() * x_2;
+  float vec_2_x_1 = s2.get_vy() * x_2;
+  float vec_2_x_2 = s2.get_vz() * x_2;
+
+  // Subtract 
+  float vec_2_y_0 = s2.get_vx() - vec_2_x_0;
+  float vec_2_y_1 = s2.get_vy() - vec_2_x_1;
+  float vec_2_y_2 = s2.get_vz() - vec_2_x_2;
+
+  // Now calculate the final velocity for both spheres
+  float mass_1_final = (s1.get_mass() - s2.get_mass()) / (s1.get_mass() + s2.get_mass());
+  float mass_2_final = (2 * s2.get_mass()) / (s1.get_mass() + s2.get_mass());
+
+  float vel_1_x = mass_1_final * vec_1_x_0 + mass_2_final * vec_2_x_0 + vec_1_y_0;
+  float vel_1_y = mass_1_final * vec_1_x_1 + mass_2_final * vec_2_x_1 + vec_1_y_1;
+  float vel_1_z = mass_1_final * vec_1_x_2 + mass_2_final * vec_2_x_2 + vec_1_y_2;
+
+  // Update the velocity of the first sphere
+  s1.set_velocity(vel_1_x, vel_1_y, vel_1_z);
+
+  mass_1_final = (2 * s1.get_mass()) / (s1.get_mass() + s2.get_mass());
+  mass_2_final = (s2.get_mass() - s1.get_mass()) / (s1.get_mass() + s2.get_mass());
+
+  float vel_2_x = mass_1_final * vec_1_x_0 + mass_2_final * vec_2_x_0 + vec_2_y_0;
+  float vel_2_y = mass_1_final * vec_1_x_1 + mass_2_final * vec_2_x_1 + vec_2_y_1;
+  float vel_2_z = mass_1_final * vec_1_x_2 + mass_2_final * vec_2_x_2 + vec_2_y_2;
+
+  // Update the velocity of the second sphere
+  s2.set_velocity(vel_2_x, vel_2_y, vel_2_z);
+  // s2.set_velocity(0.04f, 0.0f, 0.0f);
+}
+
+ // Calculate distance between spheres to check if they are colliding
+void sphere_collision_detection(int i, int j) {
+  sphere &s1 = spheres.at(i);
+  sphere &s2 = spheres.at(j);
+  // return if it is the same sphere
+  if (s1 == s2) {
+    return;
+  }
+
+  float dist_x = s1.get_x() - s2.get_x();
+  float dist_y = s1.get_y() - s2.get_y();
+  float dist_z = s1.get_z() - s2.get_z();
+
+  float dist = std::sqrt((dist_x * dist_x) + (dist_y * dist_y) + (dist_z * dist_z));
+  float sum_radii = s1.get_radius() + s2.get_radius();
+  // in this case, it is colliding, call sphere_collision
+  if (dist < sum_radii) {
+    std::cout << "hit" << '\n';
+    
+    // Move spheres away from each other to allow for collision computation
+    float move = (sum_radii / dist) / 2;
+    s1.set_x(s1.get_x() + dist_x * move / dist);
+    s1.set_y(s1.get_y() + dist_y * move / dist);
+    s1.set_z(s1.get_z() + dist_z * move / dist);
+
+    s2.set_x(s2.get_x() + dist_x * move / dist);
+    s2.set_y(s2.get_y() + dist_y * move / dist);
+    s2.set_z(s2.get_z() + dist_z * move / dist);
+    sphere_collision(i, j);
+  }
+}
+
+// Handles collision between the wall and a sphere
+void wall_collision(int i) {
+  sphere &s = spheres.at(i);
+  float wall = 2.0f;
+  float wall_z = -100.0f;
+  float negate = -1.0f;
+  float radius = s.get_radius();
+  // std::cout << s.get_z() << '\n';
+  if (s.get_x() > wall - s.get_radius()) {
+    s.set_x(wall - radius);
+    s.set_vx(s.get_vx() * negate);
+  }
+  if (s.get_x() < -wall + s.get_radius()) {
+    s.set_x(-wall + radius);
+    s.set_vx(s.get_vx() * negate);
+  }
+  if (s.get_y() > wall - s.get_radius()) {
+    s.set_y(wall - radius);
+    s.set_vy(s.get_vy() * negate);
+  }
+  if (s.get_y() < -wall + s.get_radius()) {
+    s.set_y(-wall + radius);
+    s.set_vy(s.get_vy() * negate);
+  }
+  if (s.get_z() > wall - s.get_radius()) {
+    s.set_z(wall - radius);
+    s.set_vz(s.get_vz() * negate);
+  }
+  if (s.get_z() < -wall + s.get_radius()) {
+    s.set_z(-wall + radius);
+    s.set_vz(s.get_vz() * negate);
+  }
+
+  // Update the ball position
+  s.set_x(s.get_x() + s.get_vx());
+  s.set_y(s.get_y() + s.get_vy());
+  s.set_z(s.get_z() + s.get_vz());
+}
+
 // Callback function that will be used to refresh the window
 void timer_callback(int value) {
-  for(sphere& s: spheres) {
+  for (int i = 0; i < spheres.size(); ++i) {
 
-    // Handle the sphere bouncing off of walls
-    float wall = 2.0f;
-    float wall_z = -100.0f;
-    float negate = -1.0f;
-    float radius = s.get_radius();
-    // std::cout << s.get_z() << '\n';
-    if (s.get_x() > wall - s.get_radius()) {
-      std::cout << "1: hit x" << '\n';
-      s.set_x(wall - radius);
-      s.set_vx(s.get_vx() * negate);
-    }
-    if (s.get_x() < -wall + s.get_radius()) {
-      std::cout << "2: hit x" << '\n';
-      s.set_x(-wall + radius);
-      s.set_vx(s.get_vx() * negate);
-    }
-    if (s.get_y() > wall - s.get_radius()) {
-      std::cout << "1: hit y" << '\n';
-      s.set_y(wall - radius);
-      s.set_vy(s.get_vy() * negate);
-    }
-    if (s.get_y() < -wall + s.get_radius()) {
-      std::cout << "2: hit y" << '\n';
-      s.set_y(-wall + radius);
-      s.set_vy(s.get_vy() * negate);
-    }
-    if (s.get_z() > wall - s.get_radius()) {
-      std::cout << "1: hit z" << '\n';
-      s.set_z(wall - radius);
-      s.set_vz(s.get_vz() * negate);
-    }
-    if (s.get_z() < -wall + s.get_radius()) {
-      std::cout << "2: hit z" << '\n';
-      s.set_z(-wall + radius);
-      s.set_vz(s.get_vz() * negate);
+    for (int j = 0; j < spheres.size(); ++j) {
+      sphere_collision_detection(i, j);
     }
 
-    // Update the ball position
-    s.set_x(s.get_x() + s.get_vx());
-    s.set_y(s.get_y() + s.get_vy());
-    s.set_z(s.get_z() + s.get_vz());
+    wall_collision(i);
   }
 
   glutPostRedisplay();
@@ -99,17 +205,17 @@ void keyboard_callback(int key, int x, int y) {
 void init_spheres() {
   // Initialize balls with random positions and colors
    std::vector<float> position1 = {1.0f, 0.0f, 0.0f};
-   std::vector<float> velocity1 = {0.07f, 0.02f, 0.0f};
+   std::vector<float> velocity1 = {0.01f, 0.02f, 0.0f};
    float radius1 = 0.2;
    
-   sphere s1(1, radius1, position1, velocity1);
+   sphere s1(0, radius1, position1, velocity1);
    spheres.push_back(s1);
 
-   std::vector<float> position2 = {1.6f, 0.6f, 0.0f};
+   std::vector<float> position2 = {1.0f, 1.0f, 0.0f};
    std::vector<float> velocity2 = {-0.04f, 0.02f, 0.0f};
-   float radius2 = 0.08;
+   float radius2 = 0.3;
 
-   sphere s2(2, radius2, position2, velocity2);
+   sphere s2(1, radius2, position2, velocity2);
    spheres.push_back(s2);
 }
 
