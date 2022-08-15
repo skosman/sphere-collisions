@@ -10,6 +10,7 @@
 #include <cmath>
 #include <sphere.hpp>
 
+
 // Vector for holding all the spheres
 std::vector<sphere> spheres;
 
@@ -32,13 +33,53 @@ void display_callback() {
 
 // Callback function that will be used to refresh the window
 void timer_callback(int value) {
-  // for(sphere& s: spheres) {
-  //   // Handle the sphere bouncing off of walls
-  //   float WALL = 2.0;
-  //   if (s.get_x() > WALL - s.get_radius()) {
+  for(sphere& s: spheres) {
 
-  //   }
-  // }
+    // Handle the sphere bouncing off of walls
+    float wall = 2.0f;
+    float wall_z = -100.0f;
+    float negate = -1.0f;
+    float radius = s.get_radius();
+    // std::cout << s.get_z() << '\n';
+    if (s.get_x() > wall - s.get_radius()) {
+      std::cout << "1: hit x" << '\n';
+      s.set_x(wall - radius);
+      s.set_vx(s.get_vx() * negate);
+    }
+    if (s.get_x() < -wall + s.get_radius()) {
+      std::cout << "2: hit x" << '\n';
+      s.set_x(-wall + radius);
+      s.set_vx(s.get_vx() * negate);
+    }
+    if (s.get_y() > wall - s.get_radius()) {
+      std::cout << "1: hit y" << '\n';
+      s.set_y(wall - radius);
+      s.set_vy(s.get_vy() * negate);
+    }
+    if (s.get_y() < -wall + s.get_radius()) {
+      std::cout << "2: hit y" << '\n';
+      s.set_y(-wall + radius);
+      s.set_vy(s.get_vy() * negate);
+    }
+    if (s.get_z() > wall - s.get_radius()) {
+      std::cout << "1: hit z" << '\n';
+      s.set_z(wall - radius);
+      s.set_vz(s.get_vz() * negate);
+    }
+    if (s.get_z() < -wall + s.get_radius()) {
+      std::cout << "2: hit z" << '\n';
+      s.set_z(-wall + radius);
+      s.set_vz(s.get_vz() * negate);
+    }
+
+    // Update the ball position
+    s.set_x(s.get_x() + s.get_vx());
+    s.set_y(s.get_y() + s.get_vy());
+    s.set_z(s.get_z() + s.get_vz());
+  }
+
+  glutPostRedisplay();
+  glutTimerFunc(20, timer_callback, 0);
 }
 
 // Callback function that handles arrow keys input
@@ -57,19 +98,19 @@ void keyboard_callback(int key, int x, int y) {
 // TODO: Update to use a file to create spheres
 void init_spheres() {
   // Initialize balls with random positions and colors
-   std::vector<float> position1 = {2.0f, 0.0f, -7.0f};
-   std::vector<float> velocity1 = {1.2f, -2.0f, 1.7f};
-   float radius1 = 0.7;
+   std::vector<float> position1 = {1.0f, 0.0f, 0.0f};
+   std::vector<float> velocity1 = {0.07f, 0.02f, 0.0f};
+   float radius1 = 0.2;
    
    sphere s1(1, radius1, position1, velocity1);
    spheres.push_back(s1);
 
-  //  std::vector<float> position2 = {-80, -10, 60};
-  //  std::vector<float> velocity2 = {-6.3, -2, 4.0};
-  //  float radius2 = 9.0;
+   std::vector<float> position2 = {1.6f, 0.6f, 0.0f};
+   std::vector<float> velocity2 = {-0.04f, 0.02f, 0.0f};
+   float radius2 = 0.08;
 
-  //  sphere s2(2, radius2, position2, velocity2);
-  //  spheres.push_back(s2);
+   sphere s2(2, radius2, position2, velocity2);
+   spheres.push_back(s2);
 }
 
 // Initialize OpenGL graphics
@@ -98,13 +139,16 @@ void reshape_callback(int width, int height) {
   
   // Reset the projection matrix
   glLoadIdentity();
+  float RADIUS = 2;
+
+  glOrtho(-RADIUS, RADIUS, -RADIUS, RADIUS, -RADIUS, RADIUS);
 
   // Compute the aspect ratio for the window
-  float aspect =(float)width / (float)height;
+  // float aspect =(float)width / (float)height;
 
   // Set the view to perspective projection
   // Tranforms the view into a 2x2x1 cuboid
-  gluPerspective(45.0f, aspect, 0.1f, 100.0f);
+  // gluPerspective(45.0f, aspect, 0.1f, 100.0f);
 }
 
 // Main program that runs the sphere collision program
