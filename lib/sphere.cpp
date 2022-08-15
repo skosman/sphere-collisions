@@ -8,12 +8,13 @@
 #include <vector>
 #include <numbers>
 #include <cmath>
-#include <iostream>
 
   // Sphere constructor
-  sphere::sphere(int id, float radius, float mass, std::vector<float> position, std::vector<float> velocity) {
+  sphere::sphere(int id, float radius, std::vector<float> position, std::vector<float> velocity) {
     id_ = id;
     radius_ = radius;
+    // Calculate the mass of the sphere using the volume where density is equal to 1
+    float mass = (4.0 / 3.0) * std::numbers::pi_v<float> * std::pow(radius, 3);
     mass_ = mass;
     position_ = position;
     velocity_ = velocity;

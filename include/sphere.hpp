@@ -7,7 +7,7 @@
 class sphere {
   public:
     // Sphere constructor
-    sphere(int id, float radius, float mass, std::vector<float> position, std::vector<float> velocity);
+    sphere(int id, float radius, std::vector<float> position, std::vector<float> velocity);
 
     // Returns the id of the sphere
     int get_id() const;
@@ -54,7 +54,8 @@ class sphere {
     float mass_;
 
     // Number of slices of the sphere used to draw the surface
-    static const int slices_ = 10;
+    // Static and constant as it is the same across all spheres and should not change
+    static const int slices_ = 32;
 
     // Vectors used to hold the points to create the surface of the sphere
     float x_surface_[slices_ + 1][slices_ + 1];
