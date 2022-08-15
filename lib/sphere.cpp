@@ -1,6 +1,13 @@
 #include "sphere.hpp"
+#ifdef __APPLE_CC__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 #include <vector>
+#include <numbers>
+#include <cmath>
 
   // Sphere constructor
   sphere::sphere(int id, float radius, float mass, std::vector<float> position, std::vector<float> velocity) {
@@ -62,7 +69,45 @@
     velocity_ = updated_velocity;
   }
 
+  // Draw the surface of the sphere using openGL polygon
+  void sphere::draw() const {
+    for (int i = 0; i <= slices_; ++i) {
+      for (int j = 0; i <= slices_; ++j) {
+        // Start drawing a polygon shape
+        glBegin(GL_POLYGON);
+        
+        glNormal3f(x_surface_[i][j], y_surface_[i][j], z_surface_[i][j]);
+        glVertex3f(get_x() + radius_ * x_surface_[i][j], get_y() + radius_ * y_surface_[i][j], get_z() + radius_ * z_surface_[i][j]);
+
+        glNormal3f(x_surface_[i][j+1], y_surface_[i][j+1], z_surface_[i][j+1]);
+        glVertex3f(get_x() + radius_ * x_surface_[i][j+1], get_y() + radius_ * y_surface_[i][j+1], get_z() + radius_ * z_surface_[i][j+1]);
+
+        glNormal3f(x_surface_[i+1][j+1], y_surface_[i+1][j+1], z_surface_[i+1][j+1]);
+        glVertex3f(get_x() + radius_ * x_surface_[i+1][j+1], get_y() + radius_ * y_surface_[i+1][j+1], get_z() + radius_ * z_surface_[i+1][j+1]);
+
+        glNormal3f(x_surface_[i+1][j], y_surface_[i+1][j], z_surface_[i+1][j]);
+        glVertex3f(get_x() + radius_ * x_surface_[i+1][j], get_y() + radius_ * y_surface_[i+1][j], get_z() + radius_ * z_surface_[i+1][j]);
+        
+        // Stop drawing the polygon
+        glEnd();
+      }
+    }
+  }
+
     // Check if two spheres are equal based on their id
   bool sphere::operator==(const sphere& s) const {
     return id_ == s.get_id();
+  }
+
+  // Initializes the surface of the sphere to be used for rendering
+  void sphere::init_surface() {
+    for (int i = 0; i <= slices_; ++i) {
+      float sector_angle = 2.0 * i * std::numbers::pi_v<float> / slices_;
+      for (int j = 0; i <= slices_; ++j) {
+        float stack_angle = j * std::numbers::pi_v<float> / slices_;
+        x_surface_[i][j] = cos(sector_angle) * sin(stack_angle);
+        y_surface_[i][j] = sin(sector_angle) * sin(stack_angle);
+        z_surface_[i][j] = cos(stack_angle);
+      }
+    }
   }

@@ -1,5 +1,6 @@
-#ifndef SP_SPHERE_HPP
-#define SP_SPHERE_HPP
+#ifndef SPHERE_HPP
+#define SPHERE_HPP
+
 
 #include <vector>
 
@@ -38,6 +39,10 @@ class sphere {
     // Set the x, y, and z velocity coordinates of the sphere
     void set_velocity(float x, float y, float z);
 
+    // Draw the sphere using openGL
+    void draw() const;
+
+    // Binary equals operator
     bool operator==(const sphere &s) const;
 
   private:
@@ -48,11 +53,22 @@ class sphere {
     // Mass of the sphere
     float mass_;
 
+    // Number of slices of the sphere used to draw the surface
+    int slices_ = 32;
+
+    // Vectors used to hold the points to create the surface of the sphere
+    std::vector<std::vector<float>> x_surface_;
+    std::vector<std::vector<float>> y_surface_;
+    std::vector<std::vector<float>> z_surface_;
+
     // Vector containing the x, y, and z coordinate positions
     std::vector<float> position_;
 
     // Vector containing the x, y, and z coordinate velocity
     std::vector<float> velocity_;
+
+    // Initializes the surface of the sphere to be used for rendering
+    void init_surface();
 };
 
 #endif
