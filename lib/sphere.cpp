@@ -55,6 +55,21 @@
     return position_[2];
   }
 
+  // Set x position coordinate of the sphere
+  void sphere::set_x(float x) {
+    position_[0] = x;
+  }
+
+  // Set y position coordinate of the sphere
+  void sphere::set_y(float y) {
+    position_[1] = y;
+  }
+
+  // Set z position coordinate of the sphere
+  void sphere::set_z(float z) {
+    position_[2] = z;
+  }
+
   // Set the x, y, and z position coordinates of the sphere
   void sphere::set_position(float x, float y, float z) {
     std::vector<float> updated_position = {x, y, z};
@@ -64,6 +79,36 @@
   // Returns the x, y, and z velocity coordinates of the sphere
   std::vector<float> sphere::get_velocity() const {
     return velocity_;
+  }
+
+  // Get x velocity coordinate of the sphere
+  float sphere::get_vx() const {
+    return velocity_[0];
+  }
+
+  // Get y velocity coordinate of the sphere
+  float sphere::get_vy() const {
+    return velocity_[1];
+  }
+
+  // Get z velocity coordinate of the sphere
+  float sphere::get_vz() const {
+    return velocity_[2];
+  }
+
+  // Set x velocity coordinate of the sphere
+  void sphere::set_vx(float x) {
+    velocity_[0] = x;
+  }
+
+  // Set y velocity coordinate of the sphere
+  void sphere::set_vy(float y) {
+    velocity_[1] = y;
+  }
+
+  // Set z velocity coordinate of the sphere
+  void sphere::set_vz(float z) {
+    velocity_[2] = z;
   }
 
   // Set the x, y, and z velocity coordinates of the sphere
@@ -102,7 +147,7 @@
     return id_ == s.get_id();
   }
 
-  // Initializes the surface of the sphere to be used for rendering
+  // Initializesthe surface of the sphere to be used for rendering
   void sphere::init_surface() {
     for (int i = 0; i <= slices_; ++i) {
       float sector_angle = 2.0 * i * std::numbers::pi_v<float> / slices_;
