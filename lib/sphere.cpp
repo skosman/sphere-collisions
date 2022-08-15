@@ -8,6 +8,7 @@
 #include <vector>
 #include <numbers>
 #include <cmath>
+#include <iostream>
 
   // Sphere constructor
   sphere::sphere(int id, float radius, float mass, std::vector<float> position, std::vector<float> velocity) {
@@ -16,6 +17,7 @@
     mass_ = mass;
     position_ = position;
     velocity_ = velocity;
+    init_surface();
   }
 
   // Returns the id of the sphere
@@ -71,8 +73,8 @@
 
   // Draw the surface of the sphere using openGL polygon
   void sphere::draw() const {
-    for (int i = 0; i <= slices_; ++i) {
-      for (int j = 0; i <= slices_; ++j) {
+    for (int i = 0; i < slices_; ++i) {
+      for (int j = 0; j < slices_; ++j) {
         // Start drawing a polygon shape
         glBegin(GL_POLYGON);
         
@@ -103,7 +105,7 @@
   void sphere::init_surface() {
     for (int i = 0; i <= slices_; ++i) {
       float sector_angle = 2.0 * i * std::numbers::pi_v<float> / slices_;
-      for (int j = 0; i <= slices_; ++j) {
+      for (int j = 0; j <= slices_; ++j) {
         float stack_angle = j * std::numbers::pi_v<float> / slices_;
         x_surface_[i][j] = cos(sector_angle) * sin(stack_angle);
         y_surface_[i][j] = sin(sector_angle) * sin(stack_angle);

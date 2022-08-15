@@ -54,12 +54,12 @@ class sphere {
     float mass_;
 
     // Number of slices of the sphere used to draw the surface
-    int slices_ = 32;
+    static const int slices_ = 10;
 
     // Vectors used to hold the points to create the surface of the sphere
-    std::vector<std::vector<float>> x_surface_;
-    std::vector<std::vector<float>> y_surface_;
-    std::vector<std::vector<float>> z_surface_;
+    float x_surface_[slices_ + 1][slices_ + 1];
+    float y_surface_[slices_ + 1][slices_ + 1];
+    float z_surface_[slices_ + 1][slices_ + 1];
 
     // Vector containing the x, y, and z coordinate positions
     std::vector<float> position_;
