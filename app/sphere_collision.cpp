@@ -9,7 +9,6 @@
 #include <numbers> 
 #include <cmath>
 #include <sphere.hpp>
-#include "shading.cpp"
 
 // Vector for holding all the spheres
 std::vector<sphere> spheres;
@@ -33,7 +32,13 @@ void display_callback() {
 
 // Callback function that will be used to refresh the window
 void timer_callback(int value) {
+  // for(sphere& s: spheres) {
+  //   // Handle the sphere bouncing off of walls
+  //   float WALL = 2.0;
+  //   if (s.get_x() > WALL - s.get_radius()) {
 
+  //   }
+  // }
 }
 
 // Callback function that handles arrow keys input
