@@ -309,37 +309,37 @@ int handle_config(char *filename) {
 
     if (linestream >> r >> px >> py >> pz >> vx >> vy >> vz) {
       if (UPPER_LIMIT < spheres.size()) {
-        std::cerr << "Error: only " << UPPER_LIMIT << " spheres can be created";
+        std::cerr << "Error: only " << UPPER_LIMIT << " spheres can be created\n";
         return 1;
       }
 
 
       if (r < MIN_R || r > MAX_R) {
-        std::cerr << "Error: Sphere radius must be in range of " << MIN_R << " and " << MAX_R;
+        std::cerr << "Error: Sphere radius must be in range of " << MIN_R << " and " << MAX_R << '\n';
         return 1;
       }
       if (px < -MAX_P || px > MAX_P) {
-        std::cerr << "Error: Sphere position coordinate must be in range of " << MAX_P << " and " << MAX_P;
+        std::cerr << "Error: Sphere position coordinate must be in range of " << MAX_P << " and " << MAX_P << '\n';
         return 1;
       }
       if (py < -MAX_P || py > MAX_P) {
-        std::cerr << "Error: Sphere position coordinate must be in range of " << MAX_P << " and " << MAX_P;
+        std::cerr << "Error: Sphere position coordinate must be in range of " << MAX_P << " and " << MAX_P << '\n';
         return 1;
       }
       if (pz < -MAX_P || pz > MAX_P) {
-        std::cerr << "Error: Sphere position coordinate must be in range of " << MAX_P << " and " << MAX_P;
+        std::cerr << "Error: Sphere position coordinate must be in range of " << MAX_P << " and " << MAX_P << '\n';
         return 1;
       }
       if (vx < -MAX_V || vx > MAX_V) {
-        std::cerr << "Error: Sphere velocity coordinate must be in range of " << MAX_V << " and " << MAX_V;
+        std::cerr << "Error: Sphere velocity coordinate must be in range of " << MAX_V << " and " << MAX_V << '\n';
         return 1;
       }
       if (vy < -MAX_V || vy > MAX_V) {
-        std::cerr << "Error: Sphere velocity coordinate must be in range of " << MAX_V << " and " << MAX_V;
+        std::cerr << "Error: Sphere velocity coordinate must be in range of " << MAX_V << " and " << MAX_V << '\n';
         return 1;
       }
       if (vy < -MAX_V || vy > MAX_V) {
-        std::cerr << "Error: Sphere velocity coordinate must be in range of " << MAX_V << " and " << MAX_V;
+        std::cerr << "Error: Sphere velocity coordinate must be in range of " << MAX_V << " and " << MAX_V << '\n';
         return 1;
       } 
 
@@ -351,7 +351,7 @@ int handle_config(char *filename) {
       sphere s(id, r, position, velocity);
       spheres.push_back(s);
     } else {
-      std::cerr << "Error: Something is wrong with the provided fields";
+      std::cerr << "Error: Something is wrong with the provided fields\n";
       return 1;
     }
   }
@@ -362,31 +362,32 @@ int handle_config(char *filename) {
 int main(int argc, char *argv[]) {
 
   int opt;
+  char *filename = NULL;
 
-  while((opt = getopt(argc, argv, ":if:lrx")) != -1) 
-    { 
-        switch(opt) 
-        { 
-            case 'i': 
-            case 'l': 
-            case 'r': 
-                printf("option: %c\n", opt); 
-                break; 
-            case 'f': 
-                printf("filename: %s\n", optarg); 
-                break; 
-            case ':': 
-                printf("option needs a value\n"); 
-                break; 
-            case '?': 
-                printf("unknown option: %c\n", optopt);
-                break; 
-        } 
+  while((opt = getopt(argc, argv, "f:")) != -1) { 
+    switch(opt) { 
+      case 'f':
+        filename = optarg;
+        break; 
+      case '?': 
+        if (optopt == 'f') {
+          std::cerr << "Error: Flag -f requires a filename arugment\n";
+        } else if (isprint(optopt)) {
+          std::cerr << "Unknown flag -" << (char)optopt << "\n";
+        } else {
+          std::cerr << "Unknown flag\n";
+        }
+        return 1;
+      default:
+        return 1;
+      }
     }
-
-    int failure = handle_config(optarg);
-    if (failure) {
-      return 1;
+    if (filename) {
+      if (handle_config(filename)) {
+        return 1;
+      }
+    } else {
+      init_spheres();
     }
 
     std::cout << "Welcome to the sphere collision program!\n"
@@ -407,26 +408,11 @@ int main(int argc, char *argv[]) {
     // Add callback functions to display and handle user input
     glutDisplayFunc(display_callback);
     glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
-  glutReshapeFunc(reshape_callback); 
-    glutReshapeFunc(reshape_callback);
     glutTimerFunc(10, timer_callback, 0);
     glutSpecialFunc(keyboard_callback);
 
     // Initialize OpenGL and the spheres to be displayed
     init_gl();
-    // init_spheres();
     // Will continuously loop to render the program
     glutMainLoop();
 
