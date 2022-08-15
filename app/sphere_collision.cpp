@@ -8,29 +8,17 @@
 #include <vector>
 #include <numbers> 
 #include <cmath>
+#include <random>
 #include <sphere.hpp>
 // #include "collision.hpp"
+#include "shading.cpp"
+
+#define UPPER_LIMIT 10
+#define LOWER_LIMIT 1
 
 
 // Vector for holding all the spheres
 std::vector<sphere> spheres;
-
-// Callback function that handles displaying the objects in the program
-void display_callback() {
-  // Clear the color and depth buffers
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // Use the model-view matrix
-  glMatrixMode(GL_MODELVIEW);
-  // Reset the model-view matrix
-  glLoadIdentity();
-
-  // Draw each ball witin the list of spheres
-  for(sphere& s: spheres) {
-    s.draw();
-  }
-
-  glutSwapBuffers();
-}
 
 // Handles collision between two spheres
 // Precondition: The two given spheres are not the same sphere
@@ -120,7 +108,7 @@ void sphere_collision_detection(int i, int j) {
   // in this case, it is colliding, call sphere_collision
   if (dist < sum_radii) {
     std::cout << "hit" << '\n';
-    
+
     // Move spheres away from each other to allow for collision computation
     float move = (sum_radii / dist) / 2;
     s1.set_x(s1.get_x() + dist_x * move / dist);
@@ -188,35 +176,58 @@ void timer_callback(int value) {
   glutTimerFunc(20, timer_callback, 0);
 }
 
-// Callback function that handles arrow keys input
-void keyboard_callback(int key, int x, int y) {
-  if (key == GLUT_KEY_UP) {
-    std::cout << "up" << '\n';
+// Callback function that handles displaying the objects in the program
+void display_callback() {
+  // Clear the color and depth buffers
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // Use the model-view matrix
+  glMatrixMode(GL_MODELVIEW);
+  // Reset the model-view matrix
+  glLoadIdentity();
+
+  // Draw each ball witin the list of spheres
+  for(sphere& s: spheres) {
+    s.draw();
   }
 
-  if (key == GLUT_KEY_DOWN) {
-    std::cout << "down" << '\n';
-  }
-  
+  glutSwapBuffers();
+}
+
+
+
+// Generate random value
+float generate_random(float min, float max){
+  return ((max - min) * ((float)rand() / RAND_MAX)) + min;
+}
+
+// Generate a sphere based on random values
+void generate_sphere() {
+
+  float max_p = 2.0;
+  float x = generate_random(-max_p, max_p);
+  float y = generate_random(-max_p, max_p);
+  float z = generate_random(-max_p, max_p);
+
+  std::vector<float> position = {x, y, z};
+
+  float max_v = 0.04;
+
+  float vx = generate_random(-max_v, max_v);
+  float vy = generate_random(-max_v, max_v);
+  float vz = generate_random(-max_v, max_v);
+
+  std::vector<float> velocity = {vx, vy, 0.0f};
+  float radius = generate_random(0.1f, 0.5f);
+  int id = spheres.size();
+  sphere s(id, radius, position, velocity);
+  spheres.push_back(s);
 }
 
 // Intialize the spheres to be displayed in the program
 // TODO: Update to use a file to create spheres
 void init_spheres() {
   // Initialize balls with random positions and colors
-   std::vector<float> position1 = {1.0f, 0.0f, 0.0f};
-   std::vector<float> velocity1 = {0.01f, 0.02f, 0.0f};
-   float radius1 = 0.2;
-   
-   sphere s1(0, radius1, position1, velocity1);
-   spheres.push_back(s1);
-
-   std::vector<float> position2 = {1.0f, 1.0f, 0.0f};
-   std::vector<float> velocity2 = {-0.04f, 0.02f, 0.0f};
-   float radius2 = 0.3;
-
-   sphere s2(1, radius2, position2, velocity2);
-   spheres.push_back(s2);
+  generate_sphere();
 }
 
 // Initialize OpenGL graphics
@@ -231,6 +242,26 @@ void init_gl() {
   glDepthFunc(GL_LEQUAL);
   // Enable smooth shading for to help round spheres
   glShadeModel(GL_SMOOTH);
+}
+
+// Callback function that handles arrow keys input
+// If the user presses the up arrow key, add up to 10 spheres
+// Else if the user presses the down arrow key, remove last shere
+void keyboard_callback(int key, int x, int y) {
+  if (key == GLUT_KEY_UP) {
+    if (UPPER_LIMIT == spheres.size()) {
+      std::cout << "Cannot add any more spheres" << '\n';
+    } else {
+      generate_sphere();
+    }
+  }
+  if (key == GLUT_KEY_DOWN) {
+    if (LOWER_LIMIT == spheres.size()) {
+      std::cout << "Cannot remove any more spheres" << '\n';
+    } else {
+      spheres.pop_back();
+    }
+  }
 }
 
 // Callback function for handling the window-resize event
