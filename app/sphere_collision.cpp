@@ -15,7 +15,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "shading.cpp"
 
+// Constants
 #define UPPER_LIMIT 10
 #define LOWER_LIMIT 1
 
@@ -24,6 +26,7 @@
 
 #define MAX_V 0.04
 #define MAX_P 2.0
+
 #define WINDOW 600
 #define WALL 2
 
@@ -179,7 +182,7 @@ void timer_callback(int value) {
   }
 
   glutPostRedisplay();
-  glutTimerFunc(20, timer_callback, 0);
+  glutTimerFunc(10, timer_callback, 0);
 }
 
 void draw_box() {
@@ -187,36 +190,36 @@ void draw_box() {
   glBegin(GL_LINES);
 
       // Top Line of Middle Box
-			glVertex3f(-1.0f, 1.0f, -1.0f);
-			glVertex3f(1.0f, 1.0f, -1.0f);
+			glVertex3f(-1.0f, 1.0f, -2.0f);
+			glVertex3f(1.0f, 1.0f, -2.0f);
 
       // Right Line of Middle Box
-			glVertex3f(1.0f, 1.0f, -1.0f);
-			glVertex3f(1.0f, -1.0f, -1.0f);
+			glVertex3f(1.0f, 1.0f, -2.0f);
+			glVertex3f(1.0f, -1.0f, -2.0f);
 
       // Bottom Line of Middle Box
-			glVertex3f(1.0f, -1.0f, -1.0f);
-			glVertex3f(-1.0f, -1.0f, -1.0f);
+			glVertex3f(1.0f, -1.0f, -2.0f);
+			glVertex3f(-1.0f, -1.0f, -2.0f);
 
       // Left Line of Middle Box
-			glVertex3f(-1.0f, -1.0f, -1.0f);
-			glVertex3f(-1.0f, 1.0f, -1.0f);
+			glVertex3f(-1.0f, -1.0f, -2.0f);
+			glVertex3f(-1.0f, 1.0f, -2.0f);
 
       // Top Left Line
-      glVertex3f(-1.0f, 1.0f, -1.0f);
-			glVertex3f(-2.0f, 2.0f, -1.0f);
+      glVertex3f(-1.0f, 1.0f, -2.0f);
+			glVertex3f(-2.0f, 2.0f, -2.0f);
 
       // Top Right Line
-      glVertex3f(1.0f, 1.0f, -1.0f);
-			glVertex3f(2.0f, 2.0f, -1.0f);
+      glVertex3f(1.0f, 1.0f, -2.0f);
+			glVertex3f(2.0f, 2.0f, -2.0f);
 
       // Bottom Left Line
-      glVertex3f(-1.0f, -1.0f, -1.0f);
-			glVertex3f(-2.0f, -2.0f, -1.0f);
+      glVertex3f(-1.0f, -1.0f, -2.0f);
+			glVertex3f(-2.0f, -2.0f, -2.0f);
 
       // Bottom Right Line
-      glVertex3f(1.0f, -1.0f, -1.0f);
-			glVertex3f(2.0f, -2.0f, -1.0f);
+      glVertex3f(1.0f, -1.0f, -2.0f);
+			glVertex3f(2.0f, -2.0f, -2.0f);
 
 	glEnd();
 }
@@ -235,6 +238,7 @@ void display_callback() {
 
   // Draw each ball witin the list of spheres
   for(sphere& s: spheres) {
+    init_material(0.5, 0.5, 0.5, 100 * 0.5, 0.1, 0.5, 0.6);
     s.draw();
   }
 
@@ -259,7 +263,7 @@ void generate_sphere() {
   float vy = generate_random(-MAX_V, MAX_V);
   float vz = generate_random(-MAX_V, MAX_V);
 
-  std::vector<float> velocity = {vx, vy, 0.0f};
+  std::vector<float> velocity = {vx, vy, vz};
 
   float radius = generate_random(MIN_R, MAX_R);
 
@@ -286,6 +290,11 @@ void init_gl() {
   glDepthFunc(GL_LEQUAL);
   // Enable smooth shading for to help round spheres
   glShadeModel(GL_SMOOTH);
+
+  // Create three lights 
+  init_light(GL_LIGHT0, 0, 1, 1, 0.5, 0.5, 0.5);
+  init_light(GL_LIGHT1, 0, 0, 1, 0.5, 0.5, 0.5);
+  init_light(GL_LIGHT2, 0, 1, 0, 0.5, 0.5, 0.5);
 }
 
 // Callback function that handles arrow keys input
