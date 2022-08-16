@@ -1,0 +1,54 @@
+This is the repo for seng 475 project by Sam Kosman
+
+--- Overview ---
+The program simulates the rigid body dynamics of spheres, specially the collision detection adn 
+
+--- Running the Program ---
+
+To build and this program, first create the tmp folder to build the code by running the command:
+cmake -H. -Btmp
+
+Then build the code using the command:
+cmake --build tmp
+
+Once the program has been built, there are two ways to run 
+
+--- User Input ---
+Two user inputs are accepted during the program. It is the up arrow key and down arrow key.
+
+- up arrow: Sphere Creation
+will create a sphere with random radius, initial position and velocity. Can create up to 10 spheres.
+- down arrow: Sphere Removal
+will remove the last sphere added. Cannot remove all spheres as one sphere will always be on screen. 
+
+--- Config Files ---
+If you would like to configure your starting spheres, use the -f flag to indicate to the program that you have a configuration file.
+
+If you choose to run the program using the -f flag, a text file will be required and the name of the file must be passed as a command line argument following the -f flag.
+Each line in the config file corresponds to a sphere. A maxmimum of 10 spheres can be initialized. 
+The data in the line is first the radius of the sphere, the x, y and z position coordinates, and then the x, y, and z, velocity coordinaties. It is all of type float.
+Using this data a sphere will be created upon the creation of the program's window. 
+
+The contents of the text file must be as follows:
+  <radius> <x-pos> <y-pos> <x-pos> <x-vel> <y-vel> <z-vel>
+
+Example from input.txt
+  0.12 1.0 1.0 1.0 -0.01 0.01 0.00
+  0.2 1.5 -1.0 1.0 -0.02 -0.01 0.00
+
+Radius must be between
+  0.1 and 0.3
+Position coordinates must be between
+  -2.0 and 2.0
+Velocity coordiantes must be between
+  -0.04 and 0.04
+
+If data is missing or the wrong data type is given, the file will not be accepted. See bad.txt for an example of an unacceptable config file.
+
+--- References ---
+This code was developed using the following resources as references:
+https://www3.ntu.edu.sg/home/ehchua/programming/opengl/CG_Examples.html
+https://studiofreya.com/3d-math-and-physics/simple-sphere-sphere-collision-detection-and-collision-response/
+http://www.songho.ca/opengl/gl_sphere.html
+http://www.csce.uark.edu/~jgauch/4813/src/
+https://www.gnu.org/software/libc/manual/html_node/Example-of-Getopt.html
