@@ -12,8 +12,8 @@ Within this box, there can be 1 and up to 10 spheres that collide with the box's
 The user is able to add and remove spheres, as well as resize the window and the simulation will adjust.
 This was done to showcase the physics behind sphere collisions. 
 
-Please note: sphere and sphere collision is quite buggy, more debudding and testing is needed to fix the sphere to sphere collision.
-If you find that a collision has caused a bug, it is recommended to just remove the spheres using the down arrow indicated below.
+Please note: sphere and sphere collision can be buggy, more debudding and testing is needed to fix it.
+If you find that a spheres collision has caused a bug, it is recommended to remove the spheres using the down arrow indicated below.
 
 --- Running the Program ---
 To build and this program, run the following commands from the top directory.
