@@ -3,6 +3,7 @@ This is the repo for Seng 475 project by Sam Kosman
 --- Overview ---
 The program simulates the rigid body dynamics of spheres, specially the collision detection and response for spheres.
 It works by opening up a window and simulating spheres moving through a space defined by a box.
+Some text will print to the terminal to welcome you to the program and provide you with information on actions you can take.
 Since it is rigid dynamics, the spheres are considered solid, frictionless, inflexible objects, so momentum will be conserved through collisions.
 In addition, there is no gravity to pull the sphere's down or loss of velocity due to kinetic energy as elastic collisions are used.
 Therefore, the spheres will continuously travel through the box, never stopping. 
@@ -54,6 +55,8 @@ Two user inputs are accepted during the program. It is the up arrow key and down
 will create a sphere with random radius, initial position and velocity. Can create up to 10 spheres.
 - down arrow: Sphere Removal
 will remove the last sphere added. Cannot remove all spheres as one sphere will always be on screen. 
+
+If the user attempts to add or remove more than the set number of spheres, the terminal will print a message letting them know they cannot perform more actions until a sphere is either removed or added.
 
 --- Config Files ---
 If you would like to configure your starting spheres, use the -f flag to indicate to the program that you have a configuration file.
