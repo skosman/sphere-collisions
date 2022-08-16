@@ -2,7 +2,7 @@ This is the repo for Seng 475 project by Sam Kosman
 
 --- Overview ---
 The program simulates the rigid body dynamics of spheres, specially the collision detection and response for spheres.
-It works by opening up a window and simulating spheres moving through a space defined by a box.
+It works by opening up a window and simulating various spheres moving through a space defined by a box.
 Some text will print to the terminal to welcome you to the program and provide you with information on actions you can take.
 Since it is rigid dynamics, the spheres are considered solid, frictionless, inflexible objects, so momentum will be conserved through collisions.
 In addition, there is no gravity to pull the sphere's down or loss of velocity due to kinetic energy as elastic collisions are used.
