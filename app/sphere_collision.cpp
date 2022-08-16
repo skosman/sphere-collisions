@@ -15,17 +15,17 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-// #include "collision.hpp"
-// #include "shading.cpp"
 
 #define UPPER_LIMIT 10
 #define LOWER_LIMIT 1
 
-float MIN_R = 0.05;
-float MAX_R = 0.3;
+#define MIN_R 0.1
+#define MAX_R 0.3
 
-float MAX_V = 0.04;
-float MAX_P = 2.0;
+#define MAX_V 0.04
+#define MAX_P 2.0
+#define WINDOW 600
+#define WALL 2
 
 
 // Vector for holding all the spheres
@@ -117,7 +117,6 @@ void sphere_collision_detection(int i, int j) {
   float sum_radii = s1.get_radius() + s2.get_radius();
   // in this case, it is colliding, call sphere_collision
   if (dist < sum_radii) {
-    std::cout << "hit" << '\n';
 
     // Move spheres away from each other to allow for collision computation
     float move = (sum_radii / dist) / 2;
@@ -135,32 +134,30 @@ void sphere_collision_detection(int i, int j) {
 // Handles collision between the wall and a sphere
 void wall_collision(int i) {
   sphere &s = spheres.at(i);
-  float wall = 2.0f;
   float negate = -1.0f;
   float radius = s.get_radius();
-  // std::cout << s.get_z() << '\n';
-  if (s.get_x() > wall - radius) {
-    s.set_x(wall - radius);
+  if (s.get_x() > WALL - radius) {
+    s.set_x(WALL - radius);
     s.set_vx(s.get_vx() * negate);
   }
-  if (s.get_x() < -wall + radius) {
-    s.set_x(-wall + radius);
+  if (s.get_x() < -WALL + radius) {
+    s.set_x(-WALL + radius);
     s.set_vx(s.get_vx() * negate);
   }
-  if (s.get_y() > wall - radius) {
-    s.set_y(wall - radius);
+  if (s.get_y() > WALL - radius) {
+    s.set_y(WALL - radius);
     s.set_vy(s.get_vy() * negate);
   }
-  if (s.get_y() < -wall + radius) {
-    s.set_y(-wall + radius);
+  if (s.get_y() < -WALL + radius) {
+    s.set_y(-WALL + radius);
     s.set_vy(s.get_vy() * negate);
   }
-  if (s.get_z() > wall - radius) {
-    s.set_z(wall - radius);
+  if (s.get_z() > WALL - radius) {
+    s.set_z(WALL - radius);
     s.set_vz(s.get_vz() * negate);
   }
-  if (s.get_z() < -wall + radius) {
-    s.set_z(-wall + radius);
+  if (s.get_z() < -WALL + radius) {
+    s.set_z(-WALL + radius);
     s.set_vz(s.get_vz() * negate);
   }
 
@@ -185,6 +182,45 @@ void timer_callback(int value) {
   glutTimerFunc(20, timer_callback, 0);
 }
 
+void draw_box() {
+  glColor3f(0.0f, 0.1, 0.1);
+  glBegin(GL_LINES);
+
+      // Top Line of Middle Box
+			glVertex3f(-1.0f, 1.0f, -1.0f);
+			glVertex3f(1.0f, 1.0f, -1.0f);
+
+      // Right Line of Middle Box
+			glVertex3f(1.0f, 1.0f, -1.0f);
+			glVertex3f(1.0f, -1.0f, -1.0f);
+
+      // Bottom Line of Middle Box
+			glVertex3f(1.0f, -1.0f, -1.0f);
+			glVertex3f(-1.0f, -1.0f, -1.0f);
+
+      // Left Line of Middle Box
+			glVertex3f(-1.0f, -1.0f, -1.0f);
+			glVertex3f(-1.0f, 1.0f, -1.0f);
+
+      // Top Left Line
+      glVertex3f(-1.0f, 1.0f, -1.0f);
+			glVertex3f(-2.0f, 2.0f, -1.0f);
+
+      // Top Right Line
+      glVertex3f(1.0f, 1.0f, -1.0f);
+			glVertex3f(2.0f, 2.0f, -1.0f);
+
+      // Bottom Left Line
+      glVertex3f(-1.0f, -1.0f, -1.0f);
+			glVertex3f(-2.0f, -2.0f, -1.0f);
+
+      // Bottom Right Line
+      glVertex3f(1.0f, -1.0f, -1.0f);
+			glVertex3f(2.0f, -2.0f, -1.0f);
+
+	glEnd();
+}
+
 
 // Callback function that handles displaying the objects in the program
 void display_callback() {
@@ -195,6 +231,8 @@ void display_callback() {
   // Reset the model-view matrix
   glLoadIdentity();
 
+  draw_box();
+
   // Draw each ball witin the list of spheres
   for(sphere& s: spheres) {
     s.draw();
@@ -203,17 +241,14 @@ void display_callback() {
   glutSwapBuffers();
 }
 
-
-
 // Generate random value
 float generate_random(float min, float max){
   return ((max - min) * ((float)rand() / RAND_MAX)) + min;
 }
 
 // Generate a sphere based on random values
+// with set boundaries to work 
 void generate_sphere() {
-
-
   float x = generate_random(-MAX_P, MAX_P);
   float y = generate_random(-MAX_P, MAX_P);
   float z = generate_random(-MAX_P, MAX_P);
@@ -234,7 +269,6 @@ void generate_sphere() {
 }
 
 // Intialize the spheres to be displayed in the program
-// TODO: Update to use a file to create spheres
 void init_spheres() {
   // Initialize balls with random positions and colors
   generate_sphere();
@@ -277,7 +311,6 @@ void keyboard_callback(int key, int x, int y) {
 // Callback function for handling the window-resize event
 // Is called when the window first appears and when the window is resized
 void reshape_callback(int width, int height) {
-
   // Set the viewport to match the new window
   glViewport(0, 0, width, height);
 
@@ -286,16 +319,9 @@ void reshape_callback(int width, int height) {
   
   // Reset the projection matrix
   glLoadIdentity();
-  float RADIUS = 2;
 
-  glOrtho(-RADIUS, RADIUS, -RADIUS, RADIUS, -RADIUS, RADIUS);
-
-  // Compute the aspect ratio for the window
-  float aspect =(float)width / (float)height;
-
-  // Set the view to perspective projection
-  // Tranforms the view into a 2x2x1 cuboid
-  // gluPerspective(45.0f, aspect, 0.1f, 100.0f);
+  // Create ortho view
+  glOrtho(-WALL, WALL, -WALL, WALL, -WALL, WALL);
 }
 
 // Handle config file that specifies the radius and velocity of a sphere
@@ -312,7 +338,6 @@ int handle_config(char *filename) {
         std::cerr << "Error: only " << UPPER_LIMIT << " spheres can be created\n";
         return 1;
       }
-
 
       if (r < MIN_R || r > MAX_R) {
         std::cerr << "Error: Sphere radius must be in range of " << MIN_R << " and " << MAX_R << '\n';
@@ -364,6 +389,8 @@ int main(int argc, char *argv[]) {
   int opt;
   char *filename = NULL;
 
+  // Handle flags in command line
+  // Used to check for -f flag to indicate config file
   while((opt = getopt(argc, argv, "f:")) != -1) { 
     switch(opt) { 
       case 'f':
@@ -396,7 +423,6 @@ int main(int argc, char *argv[]) {
     // Initialize GLUT to create an openGL window
     glutInit(&argc, argv);
     // Create a 600 by 600 window
-    int WINDOW = 600;
     glutInitWindowSize(WINDOW, WINDOW);
     // Position the window in the top left side of the screen
     glutInitWindowPosition(WINDOW / 4, WINDOW / 4);
@@ -413,6 +439,7 @@ int main(int argc, char *argv[]) {
 
     // Initialize OpenGL and the spheres to be displayed
     init_gl();
+
     // Will continuously loop to render the program
     glutMainLoop();
 
