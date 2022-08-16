@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+# Print an error message and exit.
+panic()
+{
+	echo "ERROR: $@"
+	exit 1
+}
+
+# Get the directory in which the currently running script is located.
+cmd_dir=$(dirname "$0") || panic "cannot determine command directory"
+
+sphere_collision="$cmd_dir/sphere_collision"
+
+echo "Running sphere collision program"
+$sphere_collision || panic "sphere collision program failed"

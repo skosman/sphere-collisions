@@ -29,3 +29,8 @@ target_link_libraries(sphere_collision OpenGL::GL)
 include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
 target_link_libraries(sphere_collision ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
+# Install the sphere_collision program
+install(TARGETS sphere_collision DESTINATION bin)
+
+# Install the demo script.
+install(PROGRAMS demo DESTINATION bin)
