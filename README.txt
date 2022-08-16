@@ -1,17 +1,51 @@
-This is the repo for seng 475 project by Sam Kosman
+This is the repo for Seng 475 project by Sam Kosman
 
 --- Overview ---
-The program simulates the rigid body dynamics of spheres, specially the collision detection adn 
+The program simulates the rigid body dynamics of spheres, specially the collision detection and response for spheres.
+It works by opening up a window and simulating spheres moving through a space defined by a box.
+Since it is rigid dynamics, the spheres are considered solid, frictionless, inflexible objects, so momentum will be conserved through collisions.
+In addition, there is no gravity to pull the sphere's down or loss of velocity due to kinetic energy as elastic collisions are used.
+Therefore, the spheres will continuously travel through the box, never stopping. 
+
+Within this box, there can be 1 and up to 10 spheres that collide with the box's walls and each other. 
+The user is able to add and remove spheres, as well as resize the window and the simulation will adjust.
+This was done to showcase the physics behind sphere collisions. 
+
+Please note: sphere and sphere collision is quite buggy, more debudding and testing is needed to fix the sphere to sphere collision.
+If you find that a collision has caused a bug, it is recommended to just remove the spheres using the down arrow indicated below.
 
 --- Running the Program ---
+To build and this program, run the following commands from the top directory.
 
-To build and this program, first create the tmp folder to build the code by running the command:
-cmake -H. -Btmp
+First create the tmp folder to build the code by running the command:
+> cmake -H. -Btmp
 
 Then build the code using the command:
-cmake --build tmp
+> cmake --build tmp
 
-Once the program has been built, there are two ways to run 
+Once the program has been built, there are two ways to run. Just as is:
+> ./tmp/sphere_collision
+This will open the program and generate a single sphere.
+
+Or with the -f flag and filename to indicate a config file
+> ./tmp/sphere_collision -f input.txt
+This will open the program and generate spheres based on the config file.
+
+To stop running the program, exit click the exit button on the window or in the terminal type ctrl c.
+
+--- Out-of-source Build ---
+To do an out of source build, follow the following commands from the top directory.
+
+Set the install directory variables
+> export INSTALL_DIR=<path-to-directory>
+
+Build and install the software 
+> cmake -H. -Btmp_cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
+> cmake --build tmp_cmake --clean-first --target install
+
+Run the demo program (this runs the program without the -f flag)
+> $INSTALL_DIR/bin/demo
+
 
 --- User Input ---
 Two user inputs are accepted during the program. It is the up arrow key and down arrow key.
