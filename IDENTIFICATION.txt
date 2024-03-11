@@ -1,7 +1,0 @@
-name "Sam Kosman"
-student_id "V00823512"
-email "skosman@uvic.ca"
-term "2022-05"
-course "SENG475"
-section "T01"
-assignment "cpp_project"

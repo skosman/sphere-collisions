@@ -1,6 +1,4 @@
-This is the repo for Seng 475 project by Sam Kosman
-
---- Overview ---
+# --- Overview ---
 The program simulates the rigid body dynamics of spheres, specially the collision detection and response for spheres.
 It works by opening up a window and simulating various spheres moving through a space defined by a box.
 Some text will print to the terminal to welcome you to the program and provide you with information on actions you can take.
@@ -15,7 +13,7 @@ This was done to showcase the physics behind sphere collisions.
 Please note: sphere and sphere collision can be buggy, more debudding and testing is needed to fix it.
 If you find that a spheres collision has caused a bug, it is recommended to remove the spheres using the down arrow indicated below.
 
---- Running the Program ---
+## --- Running the Program ---
 To build and this program, run the following commands from the top directory.
 
 First create the tmp folder to build the code by running the command:
@@ -34,7 +32,7 @@ This will open the program and generate spheres based on the config file.
 
 To stop running the program, exit click the exit button on the window or in the terminal type ctrl c.
 
---- Out-of-source Build ---
+### --- Out-of-source Build ---
 To do an out of source build, follow the following commands from the top directory.
 
 Set the install directory variables
@@ -48,7 +46,7 @@ Run the demo program (this runs the program without the -f flag)
 > $INSTALL_DIR/bin/demo
 
 
---- User Input ---
+## --- User Input ---
 Two user inputs are accepted during the program. It is the up arrow key and down arrow key.
 
 - up arrow: Sphere Creation
@@ -58,7 +56,7 @@ will remove the last sphere added. Cannot remove all spheres as one sphere will 
 
 If the user attempts to add or remove more than the set number of spheres, the terminal will print a message letting them know they cannot perform more actions until a sphere is either removed or added.
 
---- Config Files ---
+### --- Config Files ---
 If you would like to configure your starting spheres, use the -f flag to indicate to the program that you have a configuration file.
 
 If you choose to run the program using the -f flag, a text file will be required and the name of the file must be passed as a command line argument following the -f flag.
@@ -82,7 +80,7 @@ Velocity coordiantes must be between
 
 If data is missing or the wrong data type is given, the file will not be accepted. See bad.txt for an example of an unacceptable config file.
 
---- References ---
+### --- References ---
 This code was developed using the following resources as references:
 https://www3.ntu.edu.sg/home/ehchua/programming/opengl/CG_Examples.html
 https://studiofreya.com/3d-math-and-physics/simple-sphere-sphere-collision-detection-and-collision-response/
