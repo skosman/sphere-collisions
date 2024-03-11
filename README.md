@@ -36,7 +36,7 @@ To stop running the program, exit click the exit button on the window or in the 
 To do an out of source build, follow the following commands from the top directory.
 
 Set the install directory variables
-> export INSTALL_DIR=<path-to-directory>
+> export INSTALL_DIR=`<path-to-directory>`
 
 Build and install the software 
 > cmake -H. -Btmp_cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
@@ -65,11 +65,12 @@ The data in the line is first the radius of the sphere, the x, y and z position 
 Using this data a sphere will be created upon the creation of the program's window. 
 
 The contents of the text file must be as follows:
-  <radius> <x-pos> <y-pos> <x-pos> <x-vel> <y-vel> <z-vel>
+  `<radius> <x-pos> <y-pos> <x-pos> <x-vel> <y-vel> <z-vel>`
 
-Example from input.txt
-  0.12 1.0 1.0 1.0 -0.01 0.01 0.00
-  0.2 1.5 -1.0 1.0 -0.02 -0.01 0.00
+Example from input.txt:
+> 0.12 1.0 1.0 1.0 -0.01 0.01 0.00
+
+> 0.2 1.5 -1.0 1.0 -0.02 -0.01 0.00
 
 Radius must be between
   0.1 and 0.3
